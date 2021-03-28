@@ -4,16 +4,15 @@
 import * as React from 'react'
 
 function Greeting({initialName = ''}) {
-
   function getInitialNameValue() {
       return window.localStorage.getItem('name') || initialName
   }
 
-  const [name, setName] = React.useState(getInitialNameValue); // nebo React.useState(() => window.localStorage.getItem('name') || initialName)
+  const [name, setName] = React.useState(getInitialNameValue);
 
   React.useEffect(() => {
     window.localStorage.setItem('name', name)
-  });
+  }, [name]);
 
   function handleChange(event) {
     setName(event.target.value)
@@ -31,7 +30,14 @@ function Greeting({initialName = ''}) {
 }
 
 function App() {
-  return <Greeting initialName={"George"} />
+  const [count, setCount] = React.useState(0);
+
+  return (
+  <>
+    <button onClick={() => setCount(prevCount => prevCount + 1)}>{count}</button>
+    <Greeting initialName={"George"} />
+  </>
+  )
 }
 
 export default App
