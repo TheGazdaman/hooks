@@ -10,7 +10,7 @@ function useLocalStorageWithState(key, defaultValue = '') {
     window.localStorage.setItem(key, state)
   }, [key, state]);
 
-  return [key, setState]
+  return [state, setState]
 }
 
 function Greeting({initialName = ''}) {
