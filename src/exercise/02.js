@@ -3,15 +3,20 @@
 
 import * as React from 'react'
 
-function useLocalStorageWithState(key, defaultValue = '') {
-  const [state, setState] = React.useState(() => window.localStorage.getItem(key) || defaultValue);
+function useLocalStorageWithState(key, defaultValue = '', {serialize = JSON.stringify, deserialize = JSON.parse} = {}) {
+    const [state, setState] = React.useState(() => {
+      const valueInLocaleStorage = window.localStorage.getItem(key);
+      if (valueInLocaleStorage) {
+        return deserialize(valueInLocaleStorage)
+      }
+      return defaultValue;
+    });
+      React.useEffect(() => {
+        window.localStorage.setItem(key, serialize(state))
+      }, [key, serialize, state]);
 
-  React.useEffect(() => {
-    window.localStorage.setItem(key, state)
-  }, [key, state]);
-
-  return [state, setState]
-}
+    return [state, setState]
+  }
 
 function Greeting({initialName = ''}) {
 
